@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types = 1);
+
+namespace Chr4st\ProperDuels\command\kit;
+
+use CortexPE\Commando\BaseCommand;
+
+use Chr4st\ProperDuels\command\kit\subcommand\{CreateSubCommand, DeleteSubCommand, ListSubCommand};
+
+use pocketmine\command\CommandSender;
+
+class KitCommand extends BaseCommand{
+
+	public function onRun(CommandSender $sender, string $commandLabel, array $args): void{
+		$this->sendError(self::ERR_INSUFFICIENT_ARGUMENTS);
+	}
+
+	public function prepare(): void{
+		$this->setPermission(implode(';', [
+			'properduels.command.kit.create',
+			'properduels.command.kit.delete',
+			'properduels.command.kit.list'
+		]));
+		$this->registerSubCommand(new CreateSubCommand($this->plugin, 'create'));
+		$this->registerSubCommand(new DeleteSubCommand($this->plugin, 'delete'));
+		$this->registerSubCommand(new ListSubCommand($this->plugin, 'list'));
+	}
+}
